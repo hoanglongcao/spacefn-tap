@@ -4,15 +4,19 @@ SpaceFN for Linux with tapping for dedicated arrow keys especially for 60% keybo
 
 SpaceFN-Tap is adapted from [abrasive/spacefn-evdev](https://github.com/abrasive/spacefn-evdev) with tapping for dedicated arrow keys inspired from [Anne Pro 2](https://medium.com/@thomaz.moura/how-the-anne-pro-2-mechanical-keyboard-completely-changed-my-workflow-e795f1f62026).
 
+If you have an Anne Pro 2, check [this](https://www.reddit.com/r/AnnePro/comments/9es5zv/spacefn_layout_with_tap_layer/) thread.
+
 I did not spend much time on this code so it does not look clean.
 
-## SpaceFN history
+## SpaceFN history and Anne Pro 2 Tap
 
 The story started from here: https://geekhack.org/index.php?topic=51069.0
 
 ![Image of SpaceFN](https://geekhack.org/index.php?action=dlattach;topic=51069.0;attach=44508;image)
 
-(Keys at the second layers are not the same in my code). It is personal so choose your own preference.
+Keys at the second layers are not the same in my code. It is personal so choose your own preference.
+
+![Image of Anne Pro 2 Tap](https://cdn.shopify.com/s/files/1/0268/2732/5493/t/4/assets/pf-975f45e3-36b5-436b-98f1-99662497d006--IMG8919.jpg?49)
 
 ## Tapping function
 
