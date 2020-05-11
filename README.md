@@ -6,7 +6,7 @@ SpaceFN-Tap is adapted from [abrasive/spacefn-evdev](https://github.com/abrasive
 
 If you have an Anne Pro 2, check [this](https://www.reddit.com/r/AnnePro/comments/9es5zv/spacefn_layout_with_tap_layer/) thread.
 
-I did not spend much time on this code so it does not look clean.
+I did not spend much time on this code so it does not look clean. 
 
 ## SpaceFN history and Anne Pro 2 Tap
 
@@ -23,6 +23,8 @@ Keys at the second layers are not the same in my code. It is personal so choose 
 I use `KEY_RIGHTSHIFT`, `KEY_COMPOSE`, `KEY_RIGHTALT` and `KEY_RIGHTCTRL` for `KEY_UP`, `KEY_DOWN`, `KEY_LEFT` and `KEY_RIGHT`.
 
 All these four keys should work with their normal functionalities when being pressed and held. Currently `KEY_RIGHTSHIFT` and `KEY_RIGHTCTRL` are implemented. I'll work with `KEY_COMPOSE`, `KEY_RIGHTALT` later because I don't usually use these two keys.
+
+`spacefn-tap` mimics Anne Pro 2 tap mode but not exactly the same when 4 decidated arrow keys are pressed and held. So it is better to use the `KEY_LEFTCTRL` and `KEY_LEFTALT` when `KEY_RIGHTCTRL` and `KEY_RIGHTALT` are used for the tap mode.
 
 Depending on your keyboard layout, you might need to swap these keys either by software or hardware (rewiring, check [this](https://www.reddit.com/r/MechanicalKeyboards/comments/71kzff/helpswapping_fn_and_alt_keys_on_magicforce_68/) thread).
 
