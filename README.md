@@ -38,6 +38,10 @@ sudo ./spacefn-tab /dev/input/by-id/usb-XXX-event-kbd
 
 ```
 Find your keyboard ID in `/dev/input/by-id`.
+```
+sudo ./spacefn-tab /dev/input/by-id/usb   then press Tab twice to list all input devices for
+
+```
 
 ## Modification
 You can customize by using `key_map()` as the original `spacefn-evdev` version.
