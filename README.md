@@ -45,4 +45,4 @@ You can also add new layers.
 
 Check this page to find keycode for Linux system: [input-event-codes.h](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h).
 
-Most of the keycodes are compatible with my keyboards.
+Most of the keycodes are compatible with my keyboards. If not, detect key pressed by `sudo showkey`
