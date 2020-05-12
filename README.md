@@ -19,8 +19,7 @@ The story started from here: https://geekhack.org/index.php?topic=51069.0
 
 Keys at the second layer are not the same in my code. It is personal so choose your own preference.
 
-![Image of Anne Pro 2 Tap](https://cdn.shopify.com/s/files/1/0268/2732/5493/t/4/assets/pf-975f45e3-36b5-436b-98f1-99662497d006--IMG8919.jpg?49)
-
+![Image of Anne Pro 2 Tap](/img/AnnePro2Tap.png)
 ## Tapping function
 
 I use `KEY_RIGHTSHIFT`, `KEY_COMPOSE`, `KEY_RIGHTALT` and `KEY_RIGHTCTRL` for `KEY_UP`, `KEY_DOWN`, `KEY_LEFT` and `KEY_RIGHT`.
