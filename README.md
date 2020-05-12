@@ -8,6 +8,9 @@ If you have an Anne Pro 2, check [this](https://www.reddit.com/r/AnnePro/comment
 
 I did not spend much time on this code so it does not look clean. 
 
+![Image of SpaceFN-tab](/img/layout.png)
+
+
 ## SpaceFN history and Anne Pro 2 Tap
 
 The story started from here: https://geekhack.org/index.php?topic=51069.0
