@@ -14,7 +14,7 @@ The story started from here: https://geekhack.org/index.php?topic=51069.0
 
 ![Image of SpaceFN](https://geekhack.org/index.php?action=dlattach;topic=51069.0;attach=44508;image)
 
-Keys at the second layers are not the same in my code. It is personal so choose your own preference.
+Keys at the second layer are not the same in my code. It is personal so choose your own preference.
 
 ![Image of Anne Pro 2 Tap](https://cdn.shopify.com/s/files/1/0268/2732/5493/t/4/assets/pf-975f45e3-36b5-436b-98f1-99662497d006--IMG8919.jpg?49)
 
