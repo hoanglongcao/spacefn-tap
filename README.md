@@ -28,7 +28,7 @@ I use `KEY_RIGHTSHIFT`, `KEY_COMPOSE`, `KEY_RIGHTALT` and `KEY_RIGHTCTRL` for `K
 
 Depending on your keyboard layout, you might need to swap these keys either by software or hardware (rewiring, check [this](https://www.reddit.com/r/MechanicalKeyboards/comments/71kzff/helpswapping_fn_and_alt_keys_on_magicforce_68/) thread).
 
-Check function `key_remap()`. I change `\|` to `KEY_DELETE`. Note that I also change `~`to ESC to test on my TKL. Comment out this key if you have a real 60% keyboard.
+Check function `key_remap()`. I change `\|` to `KEY_DELETE`. Note that I also change `~`to `KEY_ESC` to test on my TKL. Comment out this key if you have a real 60% keyboard.
 
 ## Compile
 ```
