@@ -17,11 +17,15 @@ enum {
     FN1,
     FN2,
     FN3,
+    FN4,
+    FN5,
 } mode = NONE;
 
 #define KEY_FN1 KEY_SPACE
 #define KEY_FN2 KEY_RIGHTSHIFT
 #define KEY_FN3 KEY_RIGHTCTRL
+#define KEY_FN4 KEY_RIGHTALT
+#define KEY_FN5 KEY_COMPOSE
 
 
 // Global device handles {{{1
@@ -161,7 +165,7 @@ unsigned int key_map(unsigned int code) {
                 system("wmctrl -k on");
                 return 0;  
             case KEY_E: // File manager
-                return KEY_YEN; // Fake keys, sync with your desktop environment hotkey
+                return KEY_YEN;
             
             case KEY_B:
                 return KEY_FN1;
@@ -184,7 +188,7 @@ unsigned int key_map(unsigned int code) {
 // Key remapping 
 int keyremap(unsigned int code){
     switch (code){
-        case KEY_GRAVE:
+        case KEY_GRAVE: // Comment out this case if you have a real 60% keyboard. I made this for my TKL
             return code = KEY_ESC; break;
         case KEY_BACKSLASH:
             return code = KEY_DELETE; break;
@@ -306,6 +310,21 @@ static void state_idle(void) {  // {{{2
             return;
         }
 
+        else if (ev.code == KEY_FN4&& ev.value == V_PRESS) {
+            state = DECIDE;
+
+            mode = FN4;
+            return;
+        }
+
+        else if (ev.code == KEY_FN5&& ev.value == V_PRESS) {
+            state = DECIDE;
+
+            mode = FN5;
+            return;
+        }
+
+
         // Switch Grave to ESC, BACKSLASH to DEL
         ev.code = keyremap(ev.code);
 
@@ -321,6 +340,7 @@ static void state_decide(void) {    // {{{2
     timeout.tv_sec = 0;
     timeout.tv_usec = 120000;
     if (mode == FN1) timeout.tv_usec = 250000;
+    else if (mode == FN5) timeout.tv_usec = 500000;
     fd_set set;
     FD_ZERO(&set);
     while (timeout.tv_usec >= 0) {
@@ -384,6 +404,37 @@ static void state_decide(void) {    // {{{2
             }
         }
 
+        else if (mode == FN4){
+            if (ev.code == KEY_FN4 && ev.value == V_RELEASE) {
+                // Switch Grave to ESC, BACKSLASH to DEL
+                // Outside this loop key are original
+                ev.code = keyremap(ev.code);
+
+                send_key(ev.code, V_PRESS);
+                send_key(ev.code, V_RELEASE);
+                        
+                for (int i=0; i<n_buffer; i++)
+                    send_key(buffer[i], V_PRESS);
+                state = IDLE;   
+                return;
+            }
+        }
+        else if (mode == FN5){
+            if (ev.code == KEY_FN5 && ev.value == V_RELEASE) {
+                // Switch Grave to ESC, BACKSLASH to DEL
+                // Outside this loop key are original
+                ev.code = keyremap(ev.code);
+
+                send_key(ev.code, V_PRESS);
+                send_key(ev.code, V_RELEASE);
+                        
+                for (int i=0; i<n_buffer; i++)
+                    send_key(buffer[i], V_PRESS);
+                state = IDLE;   
+                return;
+            }
+        }
+
         /*
 
         if (ev.code == KEY_FN1 && ev.value == V_RELEASE) {
@@ -405,10 +456,14 @@ static void state_decide(void) {    // {{{2
             unsigned int code = key_map(ev.code);
             if (mode == FN2) send_key(KEY_LEFTSHIFT, V_PRESS);
             else if (mode == FN3) send_key(KEY_LEFTCTRL, V_PRESS);
+            else if (mode == FN4) send_key(KEY_LEFTALT, V_PRESS);
+            else if (mode == FN5) send_key(KEY_COMPOSE, V_PRESS);
             send_key(code, V_PRESS);
             send_key(code, V_RELEASE);
             if (mode == FN2) send_key(KEY_LEFTSHIFT, V_RELEASE);
             else if (mode == FN3) send_key(KEY_LEFTCTRL, V_RELEASE);
+            else if (mode == FN4) send_key(KEY_LEFTALT, V_RELEASE);
+            else if (mode == FN4) send_key(KEY_COMPOSE, V_RELEASE);
             state = SHIFT;
             return;
         }
@@ -531,6 +586,82 @@ static void state_shift(void) {
                 send_key(ev.code, ev.value);
             }
             if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_LEFTCTRL, V_RELEASE);
+            
+        }
+    }
+
+    else if (mode == FN4){
+        unsigned int pressed = 0;
+        for (;;) {
+            
+            while (read_one_key(&ev));
+
+            if (ev.code== KEY_FN4&& ev.value == V_RELEASE) {
+                for (int i=0; i<n_buffer; i++)
+                    send_key(buffer[i], V_RELEASE);
+                state = IDLE;
+                if (pressed==0){
+                    send_key(KEY_LEFT, V_PRESS);
+                    send_key(KEY_LEFT, V_RELEASE);
+                }
+                return;
+            }
+            if (ev.code== KEY_FN4)
+                continue;
+            if (ev.code!=KEY_FN4) pressed = 1;
+
+            unsigned int code = key_map(ev.code);
+            if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_LEFTALT, V_PRESS);
+            if (code) {
+                if (ev.value == V_PRESS)
+                    buffer_append(code);
+                else if (ev.value == V_RELEASE)
+                    buffer_remove(code);    
+                
+                send_key(code, ev.value);
+                
+            } else {
+                send_key(ev.code, ev.value);
+            }
+            if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_LEFTALT, V_RELEASE);
+            
+        }
+    }
+    
+    else if (mode == FN5){
+        unsigned int pressed = 0;
+        for (;;) {
+            
+            while (read_one_key(&ev));
+
+            if (ev.code== KEY_FN5&& ev.value == V_RELEASE) {
+                for (int i=0; i<n_buffer; i++)
+                    send_key(buffer[i], V_RELEASE);
+                state = IDLE;
+                if (pressed==0){
+                    send_key(KEY_COMPOSE, V_PRESS);
+                    send_key(KEY_COMPOSE, V_RELEASE);
+                }
+                return;
+            }
+            if (ev.code== KEY_FN5)
+                continue;
+            if (ev.code!=KEY_FN5) pressed = 1;
+
+            unsigned int code = key_map(ev.code);
+            if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_COMPOSE, V_PRESS);
+            if (code) {
+                if (ev.value == V_PRESS)
+                    buffer_append(code);
+                else if (ev.value == V_RELEASE)
+                    buffer_remove(code);    
+                
+                send_key(code, ev.value);
+                
+            } else {
+                send_key(ev.code, ev.value);
+            }
+            if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_COMPOSE, V_RELEASE);
             
         }
     }
