@@ -87,22 +87,20 @@ unsigned int key_map(unsigned int code) {
             case KEY_L:
                 return KEY_RIGHT;
 
-            case KEY_P:
+            case KEY_LEFTBRACE:
             case KEY_RIGHTALT:
                 return KEY_HOME;
 
-            case KEY_SEMICOLON:
+            case KEY_RIGHTBRACE:
             case KEY_RIGHTCTRL:
                 return KEY_END;
 
-            case KEY_H:
             case KEY_COMPOSE:
-            case KEY_APOSTROPHE:
+            case KEY_SEMICOLON:
             case KEY_DOWN:
                 return KEY_PAGEDOWN;
             
-            case KEY_Y:
-            case KEY_LEFTBRACE:
+            case KEY_P:
             case KEY_RIGHTSHIFT:
             case KEY_UP:
                 return KEY_PAGEUP;        
@@ -161,11 +159,13 @@ unsigned int key_map(unsigned int code) {
 
 
             // Other shortcuts
+            /*
             case KEY_D:// Show desktop
                 system("wmctrl -k on");
                 return 0;  
             case KEY_E: // File manager
                 return KEY_YEN;
+            */
             
             case KEY_B:
                 return KEY_FN1;
@@ -205,7 +205,6 @@ int keyremap(unsigned int code){
 
 // Blacklist keys for which I have a mapping, to try and train myself out of using them
 int blacklist(unsigned int code) {
-    /*
     switch (code) {
         case KEY_UP:
         case KEY_DOWN:
@@ -231,7 +230,6 @@ int blacklist(unsigned int code) {
         case KEY_F12:
             return 1;
     }
-    */
     return 0;
 }
 
@@ -484,6 +482,7 @@ static void state_shift(void) {
     struct input_event ev;  
     
     if (mode == FN1){
+        unsigned int pressed = 0;
         for (;;) {
             while (read_one_key(&ev));
 
@@ -491,10 +490,16 @@ static void state_shift(void) {
                 for (int i=0; i<n_buffer; i++)
                     send_key(buffer[i], V_RELEASE);
                 state = IDLE;
+                if (pressed==0){
+                    send_key(KEY_SPACE, V_PRESS);
+                    send_key(KEY_SPACE, V_RELEASE);
+                }
                 return;
             }
             if (ev.code== KEY_FN1)
                 continue;
+
+            if (ev.code!=KEY_FN1) pressed = 1;
 
             unsigned int code = key_map(ev.code);
             
