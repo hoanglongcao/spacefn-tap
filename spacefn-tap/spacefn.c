@@ -74,9 +74,6 @@ static int buffer_append(unsigned int code) {
 unsigned int key_map(unsigned int code) {
     if (mode == FN1){
         switch (code) {
-            case KEY_Q:
-                buffer_clean();
-                exit(0);
             // Navigation
             case KEY_J:
                 return KEY_LEFT;
@@ -139,12 +136,6 @@ unsigned int key_map(unsigned int code) {
             case KEY_SLASH:
                 return KEY_MUTE;
 
-            // Other decicated keys
-            case KEY_W:
-                return KEY_SYSRQ; //PrintScreen
-            case KEY_R:
-                return KEY_INSERT;
-
             // ESC to `~
             case KEY_ESC:
                 return KEY_GRAVE;
@@ -182,6 +173,27 @@ unsigned int key_map(unsigned int code) {
                 return KEY_PAGEDOWN;
         }   
     }
+
+    else if (mode == FN5){
+        switch (code) {
+            case KEY_Q:
+                buffer_clean();
+                exit(0);
+                    // Other decicated keys
+            case KEY_P:
+                return KEY_SYSRQ; //PrintScreen
+            case KEY_I:
+                return KEY_INSERT;
+            case KEY_LEFTBRACE:
+                return KEY_HOME;
+            case KEY_RIGHTBRACE:
+                return KEY_END;    
+        }   
+    }
+
+            
+
+
     return 0;
 }
 
@@ -455,13 +467,13 @@ static void state_decide(void) {    // {{{2
             if (mode == FN2) send_key(KEY_LEFTSHIFT, V_PRESS);
             else if (mode == FN3) send_key(KEY_LEFTCTRL, V_PRESS);
             else if (mode == FN4) send_key(KEY_LEFTALT, V_PRESS);
-            else if (mode == FN5) send_key(KEY_COMPOSE, V_PRESS);
+            //else if (mode == FN5) send_key(KEY_COMPOSE, V_PRESS);
             send_key(code, V_PRESS);
             send_key(code, V_RELEASE);
             if (mode == FN2) send_key(KEY_LEFTSHIFT, V_RELEASE);
             else if (mode == FN3) send_key(KEY_LEFTCTRL, V_RELEASE);
             else if (mode == FN4) send_key(KEY_LEFTALT, V_RELEASE);
-            else if (mode == FN4) send_key(KEY_COMPOSE, V_RELEASE);
+            //else if (mode == FN5) send_key(KEY_COMPOSE, V_RELEASE);
             state = SHIFT;
             return;
         }
@@ -524,7 +536,7 @@ static void state_shift(void) {
             
             while (read_one_key(&ev));
 
-            if (ev.code== KEY_FN2&& ev.value == V_RELEASE) {
+            if (ev.code== KEY_FN2 && ev.value == V_RELEASE) {
                 for (int i=0; i<n_buffer; i++)
                     send_key(buffer[i], V_RELEASE);
                 state = IDLE;
@@ -563,7 +575,7 @@ static void state_shift(void) {
             
             while (read_one_key(&ev));
 
-            if (ev.code== KEY_FN3&& ev.value == V_RELEASE) {
+            if (ev.code== KEY_FN3 && ev.value == V_RELEASE) {
                 for (int i=0; i<n_buffer; i++)
                     send_key(buffer[i], V_RELEASE);
                 state = IDLE;
@@ -578,7 +590,7 @@ static void state_shift(void) {
             if (ev.code!=KEY_FN3) pressed = 1;
 
             unsigned int code = key_map(ev.code);
-            if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_LEFTCTRL, V_PRESS);
+            //if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_LEFTCTRL, V_PRESS);
             if (code) {
                 if (ev.value == V_PRESS)
                     buffer_append(code);
@@ -588,9 +600,11 @@ static void state_shift(void) {
                 send_key(code, ev.value);
                 
             } else {
+                send_key(KEY_LEFTCTRL, V_PRESS);
                 send_key(ev.code, ev.value);
+                send_key(KEY_LEFTCTRL, V_RELEASE);
             }
-            if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_LEFTCTRL, V_RELEASE);
+            //if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_LEFTCTRL, V_RELEASE);
             
         }
     }
@@ -601,7 +615,7 @@ static void state_shift(void) {
             
             while (read_one_key(&ev));
 
-            if (ev.code== KEY_FN4&& ev.value == V_RELEASE) {
+            if (ev.code== KEY_FN4 && ev.value == V_RELEASE) {
                 for (int i=0; i<n_buffer; i++)
                     send_key(buffer[i], V_RELEASE);
                 state = IDLE;
@@ -616,7 +630,7 @@ static void state_shift(void) {
             if (ev.code!=KEY_FN4) pressed = 1;
 
             unsigned int code = key_map(ev.code);
-            if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_LEFTALT, V_PRESS);
+            //if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_LEFTALT, V_PRESS);
             if (code) {
                 if (ev.value == V_PRESS)
                     buffer_append(code);
@@ -626,9 +640,11 @@ static void state_shift(void) {
                 send_key(code, ev.value);
                 
             } else {
+                send_key(KEY_LEFTALT, V_PRESS);
                 send_key(ev.code, ev.value);
+                send_key(KEY_LEFTALT, V_RELEASE);
             }
-            if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_LEFTALT, V_RELEASE);
+            //if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_LEFTALT, V_RELEASE);
             
         }
     }
@@ -639,10 +655,11 @@ static void state_shift(void) {
             
             while (read_one_key(&ev));
 
-            if (ev.code== KEY_FN5&& ev.value == V_RELEASE) {
+            if (ev.code== KEY_FN5 && ev.value == V_RELEASE) {
                 for (int i=0; i<n_buffer; i++)
                     send_key(buffer[i], V_RELEASE);
                 state = IDLE;
+                printf("%d",pressed);
                 if (pressed==0){
                     send_key(KEY_COMPOSE, V_PRESS);
                     send_key(KEY_COMPOSE, V_RELEASE);
@@ -651,10 +668,9 @@ static void state_shift(void) {
             }
             if (ev.code== KEY_FN5)
                 continue;
-            if (ev.code!=KEY_FN5) pressed = 1;
+            if (ev.code!=KEY_FN5) pressed = 1; 
 
             unsigned int code = key_map(ev.code);
-            if ((code != KEY_PAGEUP)&&(code != KEY_PAGEDOWN)) send_key(KEY_COMPOSE, V_PRESS);
             if (code) {
                 if (ev.value == V_PRESS)
                     buffer_append(code);
@@ -666,7 +682,6 @@ static void state_shift(void) {
             } else {
                 send_key(ev.code, ev.value);
             }
-            if ((code != KEY_PAGEUP)&&(code!=KEY_PAGEDOWN)) send_key(KEY_COMPOSE, V_RELEASE);
             
         }
     }
