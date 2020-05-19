@@ -30,18 +30,24 @@ Depending on your keyboard layout, you might need to swap these keys either by s
 
 Check function `key_remap()`. I change `\|` to `KEY_DELETE`. Note that I also change `~`to `KEY_ESC` to test on my TKL. Comment out this key if you have a real 60% keyboard.
 
-## Compile
+
+## Compile and Run
+
+Requirement: `libudev`
 ```
 make
 
 sudo ./spacefn-tab /dev/input/by-id/usb-XXX-event-kbd
 
 ```
-Find your keyboard ID in `/dev/input/by-id`.
+Find your keyboard ID in `/dev/input/by-id` (for USB) and `/dev/input/by-path` (for PS/2). 
 ```
-sudo ./spacefn-tab /dev/input/by-id/usb   then press Tab twice to list all input devices for
+sudo ./spacefn-tab /dev/input/by-id/usb   then press Tab twice to list all input devices 
+
+sudo ./spacefn-tab /dev/input/by-path/    then press Tab twice to list all input devices
 
 ```
+After runing, there is a bug that "new lines" are running continously in the console due to the library. You just need to press any key and it should be fine to use.
 
 ## Modification
 You can customize by using `key_map()` as the original `spacefn-evdev` version.
